@@ -1,116 +1,61 @@
-const html = document.querySelector('html')
-const focoBt = document.querySelector('.app__card-button--foco')
-const curtoBt = document.querySelector('.app__card-button--curto')
-const longoBt = document.querySelector('.app__card-button--longo')
-const banner = document.querySelector('.app__image')
-const titulo = document.querySelector('.app__title')
-const botoes = document.querySelectorAll('.app__card-button')
-const startPauseBt = document.querySelector('#start-pause')
-const musicaFocoInput = document.querySelector('#alternar-musica')
-const iniciarOuPausarBt = document.querySelector('#start-pause span')
-const iniciarOuPausarBtIcone = document.querySelector(".app__card-primary-butto-icon") 
-const tempoNaTela = document.querySelector('#timer')
+// encontrar o botão adicionar tarefa
 
-const musica = new Audio('/sons/luna-rise-part-one.mp3')
-const audioPlay = new Audio('/sons/play.wav');
-const audioPausa = new Audio('/sons/pause.mp3');
-const audioTempoFinalizado = new Audio('./sons/beep.mp3')
+const btnAdicionarTarefa = document.querySelector('.app__button--add-task')
+const formAdicionarTarefa = document.querySelector('.app__form-add-task')
+const textarea = document.querySelector('.app__form-textarea')
+const ulTarefas = document.querySelector('.app__section-task-list')
 
-let tempoDecorridoEmSegundos = 30
-let intervaloId = null
+const tarefas = JSON.parse(localStorage.getItem('tarefas')) || []
 
-musica.loop = true
+function criarElementoTarefa(tarefa) {
+    const li = document.createElement('li')
+    li.classList.add('app__section-task-list-item')
 
-musicaFocoInput.addEventListener('change', () => {
-    if(musica.paused) {
-        musica.play()
-    } else {
-        musica.pause()
-    }
+    const svg = document.createElement('svg')
+    svg.innerHTML = `
+        <svg class="app__section-task-icon-status" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="12" fill="#FFF"></circle>
+            <path d="M9 16.1719L19.5938 5.57812L21 6.98438L9 18.9844L3.42188 13.4062L4.82812 12L9 16.1719Z"
+                fill="#01080E"></path>
+        </svg>
+    `
+    const paragrafo = document.createElement('p')
+    paragrafo.textContent = tarefa.descricao
+    paragrafo.classList.add('app__section-task-list-item-description')
+
+    const botao = document.createElement('button')
+    botao.classList.add('app_button-edit')
+
+    const imagemBotao = document.createElement('img')
+    imagemBotao.setAttribute('src', '/imagens/edit.png')
+    botao.append(imagemBotao)
+
+    li.append(svg)
+    li.append(paragrafo)
+    li.append(botao)
+
+    return li
+}   
+
+btnAdicionarTarefa.addEventListener('click', () => {
+    formAdicionarTarefa.classList.toggle('hidden')
 })
 
-focoBt.addEventListener('click', () => {
-    tempoDecorridoEmSegundos = 30
-    alterarContexto('foco')
-    focoBt.classList.add('active')
+formAdicionarTarefa.addEventListener('submit', (evento) => {
+    evento.preventDefault();
+    const tarefa = {
+        descricao: textarea.value
+    }
+    tarefas.push(tarefa)
+    const elementoTarefa = criarElementoTarefa(tarefa)
+    ulTarefas.append(elementoTarefa)
+    localStorage.setItem('tarefas', JSON.stringify(tarefas))
+    textarea.value = ''
+    formAdicionarTarefa.classList.add('hidden')
 })
 
-curtoBt.addEventListener('click', () => {
-    tempoDecorridoEmSegundos = 5
-    alterarContexto('descanso-curto')
-    curtoBt.classList.add('active')
-})
-
-longoBt.addEventListener('click', () => {
-    tempoDecorridoEmSegundos = 15
-    alterarContexto('descanso-longo')
-    longoBt.classList.add('active')
-})
-
-function alterarContexto(contexto) {
-    mostrarTempo()
-    botoes.forEach(function (contexto){
-        contexto.classList.remove('active')
-    })
-    html.setAttribute('data-contexto', contexto)
-    banner.setAttribute('src', `/imagens/${contexto}.png`)
-    switch (contexto) {
-        case "foco":
-            titulo.innerHTML = `
-            Otimize sua produtividade,<br>
-                <strong class="app__title-strong">mergulhe no que importa.</strong>
-            `
-            break;
-        case "descanso-curto":
-            titulo.innerHTML = `
-            Que tal dar uma respirada? <strong class="app__title-strong">Faça uma pausa curta!</strong>
-            ` 
-            break;
-        case "descanso-longo":
-            titulo.innerHTML = `
-            Hora de voltar à superfície.<strong class="app__title-strong"> Faça uma pausa longa.</strong>
-            `
-        default:
-            break;
-    }
-}
-
-const contagemRegressiva = () => {
-    if(tempoDecorridoEmSegundos <= 0){
-        audioTempoFinalizado.play()
-        alert('Tempo finalizado!')
-        zerar()
-        return
-    }
-    tempoDecorridoEmSegundos -= 1
-    mostrarTempo()
-}
-
-startPauseBt.addEventListener('click', iniciarOuPausar)
-
-function iniciarOuPausar() {
-    if(intervaloId){
-        audioPausa.play()
-        zerar()
-        return
-    }
-    audioPlay.play()
-    intervaloId = setInterval(contagemRegressiva, 1000)
-    iniciarOuPausarBt.textContent = "Pausar"
-    iniciarOuPausarBtIcone.setAttribute('src', `/imagens/pause.png`)
-}
-
-function zerar() {
-    clearInterval(intervaloId) 
-    iniciarOuPausarBt.textContent = "Começar"
-    iniciarOuPausarBtIcone.setAttribute('src', `/imagens/play_arrow.png`)
-    intervaloId = null
-}
-
-function mostrarTempo() {
-    const tempo = new Date(tempoDecorridoEmSegundos * 1000)
-    const tempoFormatado = tempo.toLocaleTimeString('pt-Br', {minute: '2-digit', second: '2-digit'})
-    tempoNaTela.innerHTML = `${tempoFormatado}`
-}
-
-mostrarTempo()
+tarefas.forEach(tarefa => {
+    const elementoTarefa = criarElementoTarefa(tarefa)
+    ulTarefas.append(elementoTarefa)
+});

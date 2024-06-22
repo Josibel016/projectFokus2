@@ -20,8 +20,7 @@ formAdicionarTarefa.addEventListener('submit', (evento) => {
         descricao: textarea.value
     };
     tarefas.push(tarefa);
-    atualizarT
-    arefas();
+    atualizarTarefas();
     const elementoTarefa = criarElementoTarefa(tarefa);
     ulTarefas.append(elementoTarefa);
     textarea.value = '';
@@ -51,6 +50,12 @@ function criarElementoTarefa(tarefa) {
     paragrafo.textContent = tarefa.descricao;
 
     const botao = document.createElement('button');
+    botao.classList.add('app_button-edit')
+botao.onclick=()=>{
+    const novaDescricao= prompt('what is your new task?');
+    paragrafo.textContent = novaDescricao;  
+}
+
     const imagemBotao = document.createElement('img'); // Corrected typo
     imagemBotao.setAttribute('src', 'imagens/pause.png'); // Corrected src path
 

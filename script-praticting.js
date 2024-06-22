@@ -52,9 +52,11 @@ function criarElementoTarefa(tarefa) {
     const botao = document.createElement('button');
     botao.classList.add('app_button-edit')
 botao.onclick=()=>{
+    //debugger
     const novaDescricao= prompt('what is your new task?');
+    if (novaDescricao){
     paragrafo.textContent = novaDescricao;  
-}
+}}
 
     const imagemBotao = document.createElement('img'); // Corrected typo
     imagemBotao.setAttribute('src', 'imagens/pause.png'); // Corrected src path

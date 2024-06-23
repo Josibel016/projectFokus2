@@ -399,7 +399,7 @@ h1, h2, h3, h4, h5, h6 {
 .app__section-task-list-item-description {
     flex-grow: 1;
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 2.5rem;
     font-style: normal;
     font-weight: 600;
     line-height: 150%;

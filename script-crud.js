@@ -35,9 +35,10 @@ function criarElementoTarefa(tarefa) {
     paragrafo.textContent=novaDescricao;
     tarefa.descricao=novaDescricao;
     atualizarTarefas();
-    }   
+}
+
     const imagemBotao = document.createElement('img')
-    imagemBotao.setAttribute('src', '/imagens/edit.png')
+    imagemBotao.setAttribute('src', 'imagens/edit.png')
     botao.append(imagemBotao)
 
     li.append(svg)
@@ -64,7 +65,19 @@ formAdicionarTarefa.addEventListener('submit', (evento) => {
     formAdicionarTarefa.classList.add('hidden')
 })
 
+
 tarefas.forEach(tarefa => {
     const elementoTarefa = criarElementoTarefa(tarefa)
     ulTarefas.append(elementoTarefa)
 });
+
+const btnCancelar= document.querySelector('.app__form-footer__button--cancel')
+   
+function limparFormulario (){
+   
+        textarea.value='';
+      
+        formAdicionarTarefa.classList.toggle('hidden')
+    }
+
+    btnCancelar.addEventListener('click', limparFormulario);

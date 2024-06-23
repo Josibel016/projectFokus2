@@ -36,6 +36,25 @@ function criarElementoTarefa(tarefa) {
     tarefa.descricao=novaDescricao;
     atualizarTarefas();
 }
+    const botaoDeteteTask =document.createElement('button');
+    botaoDeteteTask.textContent = ('Delete')
+    botaoDeteteTask.classList.add('app_button-edit')
+    
+    
+    
+   
+    botaoDeteteTask.addEventListener('click',()=>{
+        const index = tarefas.indexOf(tarefa)
+        if (index > -1){
+            tarefas.splice(index,1)
+            atualizarTarefas();
+            li.remove();
+        }
+    })
+
+    
+
+
 
     const imagemBotao = document.createElement('img')
     imagemBotao.setAttribute('src', 'imagens/edit.png')
@@ -44,6 +63,7 @@ function criarElementoTarefa(tarefa) {
     li.append(svg)
     li.append(paragrafo)
     li.append(botao)
+    li.append(botaoDeteteTask)
 
     return li
 }   

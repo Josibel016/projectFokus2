@@ -34,9 +34,9 @@ tarefas.forEach(tarefa => {
 
 function criarElementoTarefa(tarefa) {
     const li = document.createElement('li');
-    li.classList.add('app__section-task-list-item'); // Corrected class name
+    li.classList.add('app__section-task-list-item'); 
 
-    const svg = document.createElement('div'); // Corrected to create a div and set innerHTML later
+    const svg = document.createElement('div'); 
     svg.innerHTML = `
         <svg class="app__section-task-icon-status" width="24" height="24" viewBox="0 0 24 24" fill="none"
             xmlns="http://www.w3.org/2000/svg">
@@ -58,8 +58,8 @@ botao.onclick=()=>{
     paragrafo.textContent = novaDescricao;  
 }}
 
-    const imagemBotao = document.createElement('img'); // Corrected typo
-    imagemBotao.setAttribute('src', 'imagens/pause.png'); // Corrected src path
+    const imagemBotao = document.createElement('img'); 
+    imagemBotao.setAttribute('src', 'imagens/pause.png'); 
 
     botao.append(imagemBotao);
 
